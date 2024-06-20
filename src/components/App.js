@@ -1,13 +1,40 @@
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Login from './Login';
+import Home from './Home';
+import PrivateRoute from './PrivateRoute';
 
-import React from "react";
-import './../styles/App.css';
+function App() {
+  const [isAuth, setIsAuth] = useState(false);
 
-const App = () => {
   return (
-    <div>
-        {/* Do not remove the main div */}
-    </div>
-  )
+    <Router>
+      <div className="main-container">
+        <nav>
+          <ul>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/home">Home</Link>
+            </li>
+          </ul>
+          <p>{isAuth ? 'Authenticated' : 'Not Authenticated'}</p>
+        </nav>
+        <Routes>
+          <Route path="/login" element={<Login setAuth={setIsAuth} />} />
+          <Route
+            path="/home"
+            element={
+              <PrivateRoute isAuth={isAuth}>
+                <Home />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
